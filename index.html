@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veni Vici</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Project 4 · Veni Vici</p>
+          <h1>Discover a Cat</h1>
+          <p class="hero-copy">
+            Explore a random cat with image details and use a ban list to avoid breeds, origins, or temperaments you already know.
+          </p>
+        </div>
+        <button id="discoverButton" class="primary-button">Discover a Cat</button>
+      </header>
+
+      <section class="content-grid">
+        <article class="result-card">
+          <h2>Current Discovery</h2>
+          <div id="cardPlaceholder" class="card-placeholder">
+            <p>Click "Discover a Cat" to fetch a new item.</p>
+          </div>
+          <div id="discoveryCard" class="discovery-card hidden">
+            <img id="resultImage" alt="Cat discovery" />
+            <div class="details">
+              <div class="detail-row">
+                <span class="detail-label">Breed</span>
+                <button class="detail-value clickable" data-attr="breed" id="breedValue"></button>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Origin</span>
+                <button class="detail-value clickable" data-attr="origin" id="originValue"></button>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Temperament</span>
+                <button class="detail-value clickable" data-attr="temperament" id="temperamentValue"></button>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Life span</span>
+                <span class="detail-value" id="lifeSpanValue"></span>
+              </div>
+            </div>
+            <p class="hint">Click a value above to add it to the ban list.</p>
+          </div>
+          <button id="anotherButton" class="secondary-button hidden">Show another cat</button>
+          <p id="message" class="message"></p>
+        </article>
+
+        <aside class="side-panel">
+          <section class="panel-section">
+            <h2>Ban list</h2>
+            <p class="panel-copy">Blocked attribute values keep future results from showing the same breed, origin, or temperament.</p>
+            <ul id="banList" class="ban-list"></ul>
+          </section>
+
+          <section class="panel-section history-section">
+            <h2>History</h2>
+            <p class="panel-copy">Previously viewed cats during this session.</p>
+            <div id="historyList" class="history-list"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
