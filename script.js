@@ -1,4 +1,5 @@
-const apiEndpoint = "https://api.thecatapi.com/v1/images/search?limit=1&has_breeds=1";
+const imageEndpoint = "https://api.thecatapi.com/v1/images/search?limit=1&has_breeds=1&mime_types=jpg,png";
+const breedListEndpoint = "https://api.thecatapi.com/v1/breeds";
 const state = {
   current: null,
   history: [],
@@ -29,9 +30,7 @@ async function fetchCat() {
   while (attempt < maxAttempts && !item) {
     attempt += 1;
     try {
-      const response = await fetch(apiEndpoint);
-      const data = await response.json();
-      const cat = parseCatData(data[0]);
+      const cat = await fetchCatItem();
 
       if (!cat) {
         continue;
@@ -80,6 +79,53 @@ function parseCatData(data) {
     temperament: breed.temperament || "Unknown",
     lifeSpan: breed.life_span || "Unknown",
     id: data.id,
+  };
+}
+
+async function fetchCatItem() {
+  const response = await fetch(imageEndpoint);
+  const data = await response.json();
+  const cat = parseCatData(data[0]);
+
+  if (cat) {
+    return cat;
+  }
+
+  return await fetchCatFromRandomBreed();
+}
+
+async function fetchCatFromRandomBreed() {
+  const breedResponse = await fetch(breedListEndpoint);
+  const breeds = await breedResponse.json();
+
+  if (!Array.isArray(breeds) || breeds.length === 0) {
+    return null;
+  }
+
+  const randomBreed = breeds[Math.floor(Math.random() * breeds.length)];
+  if (!randomBreed || !randomBreed.id) {
+    return null;
+  }
+
+  const response = await fetch(
+    `https://api.thecatapi.com/v1/images/search?limit=1&breed_id=${randomBreed.id}&mime_types=jpg,png`
+  );
+  const imageData = await response.json();
+  if (!Array.isArray(imageData) || imageData.length === 0 || !imageData[0].url) {
+    return null;
+  }
+
+  return buildCatFromBreed(randomBreed, imageData[0].url, imageData[0].id);
+}
+
+function buildCatFromBreed(breed, imageUrl, imageId) {
+  return {
+    imageUrl,
+    breed: breed.name || "Unknown",
+    origin: breed.origin || "Unknown",
+    temperament: breed.temperament || "Unknown",
+    lifeSpan: breed.life_span || "Unknown",
+    id: imageId || breed.id,
   };
 }
 
